@@ -29,12 +29,12 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-        fingerprints:
-          - "4a:35:f9:2d:49:68:93:72:22:ae:0a:3d:96:e7:8b:78"
+          fingerprints:
+            - "4a:35:f9:2d:49:68:93:72:22:ae:0a:3d:96:e7:8b:78"
       - run:
-        name: Deploy SSH
-        command: |
-          ssh $SSH_USER@$SSH_HOST -t bash -ci deploy_mxt
+          name: Deploy SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST -t bash -ci deploy_mxt
 
 workflows:
   version: 2
