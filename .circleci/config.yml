@@ -8,8 +8,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+          keys:
+            - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
 
       - run: npm install
 
