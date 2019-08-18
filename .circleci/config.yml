@@ -14,11 +14,11 @@ jobs:
       - run: npm install
 
       - save_cache:
-        name: Actosoft México Trasciende Backend Cache
-        paths:
-          - ./
-        key: actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
-        when: on_success
+          name: Actosoft México Trasciende Backend Cache
+          paths:
+            - ./
+          key: actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+          when: on_success
 
       - run: npm run lint
 
