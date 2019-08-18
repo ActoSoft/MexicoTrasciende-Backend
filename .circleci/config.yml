@@ -45,6 +45,6 @@ workflows:
           branches:
             only: develop
       - deploy:
-        context: Stating-Server
-        requires:
-          - tests
+          context: Stating-Server
+          requires:
+            - tests
