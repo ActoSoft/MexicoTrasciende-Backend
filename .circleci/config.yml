@@ -7,7 +7,7 @@ jobs:
 
     steps:
       - checkout
-      - restore_cache
+      - restore_cache:
         keys:
           - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
 
