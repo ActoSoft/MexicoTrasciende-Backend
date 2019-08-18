@@ -1,0 +1,50 @@
+version: 2.0
+jobs:
+  tests:
+    docker:
+      - image: circleci/node:8.10
+    working_directory: /home/circleci/project
+
+    steps:
+      - checkout
+      - restore_cache
+        keys:
+          - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+
+      - run: npm install
+
+      - save_cache:
+        name: Actosoft México Trasciende Backend Cache
+        paths:
+          - ./
+        key: actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+        when: on_success
+
+      - run: npm run lint
+
+  deploy:
+    machine:
+      enabled: true
+
+    steps:
+      - checkout
+      - add_ssh_keys:
+        fingerprints:
+          - "4a:35:f9:2d:49:68:93:72:22:ae:0a:3d:96:e7:8b:78"
+      - run
+        name: Deploy SSH
+        command: |
+          ssh $SSH_USER@$SSH_HOST -t bash -ci deploy_mxt
+
+workflows:
+  version: 2
+  staging:
+    jobs:
+      - tests:
+        filters:
+          branches:
+            only: develop
+      - deploy:
+        context: Stating-Server
+        requires:
+          - tests
