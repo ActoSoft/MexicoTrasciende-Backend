@@ -1,0 +1,35 @@
+{
+  "name": "mexicotrasciende-backend",
+  "version": "0.1.0",
+  "description": "Backend App for Mexico Trasciende 2019 Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "./node_modules/.bin/nodemon index.js",
+    "lint": "./node_modules/.bin/eslint . --ext .js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ActoSoft/MexicoTrasciende-Backend.git"
+  },
+  "author": "Actosoft",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ActoSoft/MexicoTrasciende-Backend/issues"
+  },
+  "homepage": "https://github.com/ActoSoft/MexicoTrasciende-Backend#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.6.9",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.1.0",
+    "eslint": "^6.1.0",
+    "nodemon": "^1.19.1"
+  }
+}
