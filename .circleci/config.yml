@@ -41,9 +41,9 @@ workflows:
   staging:
     jobs:
       - tests:
-        filters:
-          branches:
-            only: develop
+          filters:
+            branches:
+              only: develop
       - deploy:
           context: Stating-Server
           requires:
