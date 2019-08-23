@@ -5,6 +5,7 @@ const passport = require('passport')
 const mongoose = require('mongoose')
 require('dotenv').config()
 require('./utils/passportConfig')(passport)
+const authRoutes = require('./routes/authRoutes')
 
 // Connection to mongoDB database
 const {
@@ -28,6 +29,8 @@ mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME
 app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
 app.use(passport.initialize())
+
+app.use('/', authRoutes)
 
 const server = http.createServer(app)
 const PORT = process.env.PORT || 5000

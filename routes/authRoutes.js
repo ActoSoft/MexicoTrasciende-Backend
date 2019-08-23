@@ -82,3 +82,5 @@ router.options('/login', (req, res) => {
             })
         })
 })
+
+module.exports = router
