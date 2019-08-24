@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const mongoose = require('mongoose')
+const teamOrganizerMemberRouter = require('./routes/teamOrganizerMemberRouter')
+const speakerRouter = require('./routes/speakerRouter')
 require('dotenv').config()
 
 // Connection to mongoDB database
@@ -25,6 +27,8 @@ mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME
 
 app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
+app.use('/teamOrganizerMembers', teamOrganizerMemberRouter)
+app.use('/speakers', speakerRouter)
 
 const server = http.createServer(app)
 const PORT = process.env.PORT || 5000
