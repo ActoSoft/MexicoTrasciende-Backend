@@ -1,39 +1,42 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const speaker = new Schema({
-    FullName: {
+const SpeakerSchema = new Schema({
+    fullName: {
         type: String,
         required: true
     },
-    Biography: {
+    biography: {
         type: String,
         required: true
     },
-    Photo: {
-        type: File,
-        required: true
-    },
-    FacebookURL: {
+    facebookURL: {
         type: String,
         required: false
     },
-    TwitterURL: {
+    twitterURL: {
         type: String,
         required: false
     },
-    InstagramURL: {
+    instagramURL: {
         type: String,
         required: false
     },
-    WebURL: {
+    webURL: {
         type: String,
         required: false
     },
     RoleEnum: {
         type: String,
-        required: true
+        required: true,
+        enum: ['Conferencist', 'Workshop', 'Master']
+    },
+    deletedAt: {
+        type: Date,
+        required: false
     }
 }, {
     timestamps:true
 })
+
+module.exports = mongoose.model('Speaker', SpeakerSchema)

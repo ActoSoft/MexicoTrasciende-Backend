@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 })
 
 //find one teamOrganizerMember
-router.get('/:id', (req,res) => {
+router.get('/:id', (req, res) => {
     TeamOrganizerMember.findById(req.params.id)
         .then(teamOrganizerMember => {
             res.json(teamOrganizerMember)

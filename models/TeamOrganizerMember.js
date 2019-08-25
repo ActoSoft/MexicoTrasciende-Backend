@@ -2,38 +2,36 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const teamOrganizerMemberSchema = new Schema({
-    FullName: {
+    fullName: {
+        type: String,
+        required: true
+    },
+    career:{
         type: String,
         required: true
     },
 
-    Photo: {
-        type: File,
-        required: true
-    },
-
-    Career:{
+    role:{
         type: String,
         required: true
     },
 
-    Role:{
-        type: String,
-        required: true
-    },
-
-    Facebook:{
+    facebook:{
         type: String,
         required: false
     },
 
-    Twitter:{
+    twitter:{
         type: String,
         required: false
     },
 
-    Instagram:{
+    instagram:{
         type: String,
+        required: false
+    },
+    deletedAt: {
+        type: Date,
         required: false
     }
 }, {
