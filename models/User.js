@@ -41,6 +41,10 @@ const userSchema = new Schema({
         type: String,
         enum: ['Admin', 'Team', 'Seller', 'Assitant'],
         required: true
+    },
+    deletedAt: {
+        type: Date,
+        required: false
     }
 })
 

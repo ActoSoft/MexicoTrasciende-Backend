@@ -3,44 +3,47 @@ const router = express.Router()
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const passport = require('passport')
 require('dotenv').config()
 const secret = process.env.JWT_SECRET || 'defaultSecret'
 
-router.post('/register', (req, res) => {
-    User.findOne({ email: req.body.email })
-        .then(user => {
-            if(user) {
-                return res.status(400).json({
-                    message: 'El email ya está utilizado'
-                })
-            } else {
-                const newUser = newUser(req.body)
-                bcrypt.getSalt(10, (err, salt) => {
-                    if (err) throw err
-                    bcrypt.hash(newUser.password,
-                        salt,
-                        (err, hash) => {
-                            if (err) throw err
-                            newUser.password = hash
-                            newUser.save()
-                                .then(user => {
-                                    res.json({
-                                        user,
-                                        message: 'ok'
+router.post('/register',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        User.findOne({ email: req.body.email })
+            .then(user => {
+                if(user) {
+                    return res.status(400).json({
+                        message: 'El email ya está utilizado'
+                    })
+                } else {
+                    const newUser = new User(req.body)
+                    bcrypt.genSalt(10, (err, salt) => {
+                        if (err) throw err
+                        bcrypt.hash(newUser.password,
+                            salt,
+                            (err, hash) => {
+                                if (err) throw err
+                                newUser.password = hash
+                                newUser.save()
+                                    .then(user => {
+                                        res.json({
+                                            user,
+                                            message: 'ok'
+                                        })
                                     })
-                                })
-                                .catch(err => {
-                                    res.status(400)
-                                        .json(err)
-                                })
-                        }
-                    )
-                })
-            }
-        })
-})
+                                    .catch(err => {
+                                        res.status(400)
+                                            .json(err)
+                                    })
+                            }
+                        )
+                    })
+                }
+            })
+    })
 
-router.options('/login', (req, res) => {
+router.post('/login', (req, res) => {
     const { email, password } = req.body
     User.findOne({ email })
         .then(user => {
