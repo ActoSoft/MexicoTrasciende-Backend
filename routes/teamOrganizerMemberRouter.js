@@ -23,3 +23,5 @@ router.get('/:id', (req, res) => {
             res.status(400).json(error)
         })
 })
+
+module.exports = router

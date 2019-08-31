@@ -16,6 +16,8 @@ const {
     DB_NAME
 } = process.env
 
+console.log(DB_HOST)
+
 mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
     { useNewUrlParser: true }
 )
