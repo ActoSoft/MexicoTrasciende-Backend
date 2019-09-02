@@ -27,7 +27,7 @@ mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME
     .catch(error => {
         console.log(`Error connecting to database ${error}`)
     })
-
+mongoose.set('useFindAndModify', false)
 app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
 app.use('/teamOrganizerMembers', teamOrganizerMemberRouter)

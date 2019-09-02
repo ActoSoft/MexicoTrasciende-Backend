@@ -34,6 +34,10 @@ const SpeakerSchema = new Schema({
     deletedAt: {
         type: Date,
         required: false
+    },
+    public: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps:true
