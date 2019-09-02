@@ -6,7 +6,7 @@ const SponsorSchema = new Schema({
         type: String,
         required: true
     },
-    webURL: {
+    web: {
         type: String,
         required: false
     },
@@ -19,6 +19,10 @@ const SponsorSchema = new Schema({
         required: false
     },
     instagram: {
+        type: String,
+        required: false
+    },
+    image: {
         type: String,
         required: false
     },
