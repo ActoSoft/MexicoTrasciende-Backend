@@ -30,10 +30,14 @@ const teamOrganizerMemberSchema = new Schema({
         type: String,
         required: false
     },
+    image: {
+        type: String,
+        required: false
+    },
     deletedAt: {
         type: Date,
         required: false
-    }
+    },
 }, {
     timestamps:true
 })

@@ -10,6 +10,10 @@ const SpeakerSchema = new Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+        required: true
+    },
     facebookURL: {
         type: String,
         required: false

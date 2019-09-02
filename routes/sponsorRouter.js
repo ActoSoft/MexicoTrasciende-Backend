@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const sponsorController = require('../controllers/SponsorController')
-// const upload = require('../utils/fileUpload')
-const saveImage = require('../utils/fiileUpload2')
+const saveImage = require('../utils/saveImages')
 
 //List sponsors
 router.get('/', (req, res) => {
@@ -46,21 +45,27 @@ router.post('/', (req, res) => {
         })
         .catch(error => {
             console.log(error)
-            console.log("aqui?")
             return res.status(400).json(error)
         })
 })
 
 router.put('/:id', (req, res) => {
     const { params, body } = req
-    sponsorController.update(params.id, body)
+    saveImage(req, res, body)
         .then(result => {
-            if(result.hasError) {
-                return res.status(400).json(result.error)
-            }
-            return res.json(result)
+            sponsorController.update(params.id, result)
+                .then(result => {
+                    if(result.hasError) {
+                        return res.status(400).json(result.error)
+                    }
+                    return res.json(result)
+                })
+                .catch(error => {
+                    return res.status(400).json(error)
+                })
         })
         .catch(error => {
+            console.log(error)
             return res.status(400).json(error)
         })
 })

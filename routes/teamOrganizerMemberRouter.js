@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const teamOrganizerMemberController = require('../controllers/TeamOrganizerMemberController')
+const saveImage = require('../utils/saveImages')
 
 //List speakers
 router.get('/', (req, res) => {
@@ -29,13 +30,18 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const data = req.body
-    teamOrganizerMemberController.create(data)
+    saveImage(req, res, req.body)
         .then(result => {
-            if (result.hasError) {
-                return res.status(400).json(result.error)
-            }
-            return res.json(result)
+            teamOrganizerMemberController.create(result)
+                .then(result => {
+                    if (result.hasError) {
+                        return res.status(400).json(result.error)
+                    }
+                    return res.json(result)
+                })
+                .catch(error => {
+                    return res.status(400).json(error)
+                })
         })
         .catch(error => {
             return res.status(400).json(error)
@@ -44,12 +50,18 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
     const { params, body } = req
-    teamOrganizerMemberController.update(params.id, body)
+    saveImage(req, res, body)
         .then(result => {
-            if(result.hasError) {
-                return res.status(400).json(result.error)
-            }
-            return res.json(result)
+            teamOrganizerMemberController.update(params.id, result)
+                .then(result => {
+                    if(result.hasError) {
+                        return res.status(400).json(result.error)
+                    }
+                    return res.json(result)
+                })
+                .catch(error => {
+                    return res.status(400).json(error)
+                })
         })
         .catch(error => {
             return res.status(400).json(error)
