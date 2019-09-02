@@ -30,7 +30,7 @@ mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME
 mongoose.set('useFindAndModify', false)
 app.use(express.json())
 app.use(express.urlencoded({ extended:false }))
-app.use('/teamOrganizerMembers', teamOrganizerMemberRouter)
+app.use('/members', teamOrganizerMemberRouter)
 app.use('/speakers', speakerRouter)
 app.use('/sponsor', sponsorRouter)
 

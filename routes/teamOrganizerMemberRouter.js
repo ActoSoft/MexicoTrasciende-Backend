@@ -1,26 +1,71 @@
 const express = require('express')
 const router = express.Router()
-const TeamOrganizerMember = require('../models/TeamOrganizerMember')
+const teamOrganizerMemberController = require('../controllers/TeamOrganizerMemberController')
 
-//List teamOrganizerMembers
+//List speakers
 router.get('/', (req, res) => {
-    TeamOrganizerMember.find()
-        .then(teamOrganizerMembers => {
-            res.json(teamOrganizerMembers)
+    teamOrganizerMemberController.findAll()
+        .then(result => {
+            if (result.hasError) {
+                return res.status(400).json(result.error)
+            }
+            return res.json(result)
         })
         .catch(error => {
-            res.status(400).json(error)
+            return res.status(400).json(error)
         })
 })
 
-//find one teamOrganizerMember
 router.get('/:id', (req, res) => {
-    TeamOrganizerMember.findById(req.params.id)
-        .then(teamOrganizerMember => {
-            res.json(teamOrganizerMember)
+    teamOrganizerMemberController.findOne(req.params.id)
+        .then(result => {
+            if (result.hasError)
+                return res.status(400).json(result.error)
+            return res.json(result)
         })
         .catch(error => {
-            res.status(400).json(error)
+            return res.status(400).json(error)
+        })
+})
+
+router.post('/', (req, res) => {
+    const data = req.body
+    teamOrganizerMemberController.create(data)
+        .then(result => {
+            if (result.hasError) {
+                return res.status(400).json(result.error)
+            }
+            return res.json(result)
+        })
+        .catch(error => {
+            return res.status(400).json(error)
+        })
+})
+
+router.put('/:id', (req, res) => {
+    const { params, body } = req
+    teamOrganizerMemberController.update(params.id, body)
+        .then(result => {
+            if(result.hasError) {
+                return res.status(400).json(result.error)
+            }
+            return res.json(result)
+        })
+        .catch(error => {
+            return res.status(400).json(error)
+        })
+})
+
+router.delete('/:id', (req, res) => {
+    teamOrganizerMemberController.delete(req.params.id)
+        .then(result => {
+            if (result.hasError) {
+                return res.status(400).json(result.error)
+            }
+            return res.json(result)
+        })
+        .catch(error => {
+            return res.status(400).json(error)
         })
 })
 
