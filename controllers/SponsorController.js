@@ -1,6 +1,5 @@
 const Sponsor = require('../models/Sponsor')
 const moment = require('moment')
-const upload = require('../utils/fileUpload')
 
 class SponsorController {
 
@@ -32,10 +31,9 @@ class SponsorController {
             })
     }
 
-    async create(body) {
+    create(body) {
         const newSponsor = new Sponsor(body)
-        console.log(newSponsor)
-        return await newSponsor.save()
+        return newSponsor.save()
             .then(sponsor => {
                 return {
                     message: 'ok',

@@ -24,7 +24,7 @@ const SponsorSchema = new Schema({
     },
     image: {
         type: String,
-        required: false
+        required: true
     },
     deletedAt: {
         type: Date,

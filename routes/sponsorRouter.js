@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const sponsorController = require('../controllers/SponsorController')
-const upload = require('../utils/fileUpload')
+// const upload = require('../utils/fileUpload')
+const saveImage = require('../utils/fiileUpload2')
 
 //List sponsors
 router.get('/', (req, res) => {
@@ -30,28 +31,24 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    let { body } = req
-    upload(req, res, (error) => {
-        if (error){
+    saveImage(req, res, req.body)
+        .then(result => {
+            sponsorController.create(result)
+                .then(result => {
+                    if (result.hasError) {
+                        return res.status(400).json(result.error)
+                    }
+                    return res.json(result)
+                })
+                .catch(error => {
+                    return res.status(400).json(error)
+                })
+        })
+        .catch(error => {
             console.log(error)
-        } else {
-            if (req.file === undefined) {
-                console.log('File is empty')
-            } else {
-                body.image = req.file.path
-            }
-        }
-        sponsorController.create(body)
-            .then(result => {
-                if (result.hasError) {
-                    return res.status(400).json(result.error)
-                }
-                return res.json(result)
-            })
-            .catch(error => {
-                return res.status(400).json(error)
-            })
-    })
+            console.log("aqui?")
+            return res.status(400).json(error)
+        })
 })
 
 router.put('/:id', (req, res) => {
