@@ -10,6 +10,8 @@ const emailConfig = require('../utils/emailConfig')
 const hbs = require('nodemailer-express-handlebars')
 const gmailTransport = emailConfig.GmailTransport
 const generateQr = require('../utils/generateQR')
+const saveQr = require('../utils/saveQR')
+const qrPathStorage = '/public/qrs'
 
 router.post('/register',
     passport.authenticate('jwt', { session: false }),
@@ -33,15 +35,17 @@ router.post('/register',
                                 })
                         bcrypt.hash(newUser.password,
                             salt,
-                            (err, hash) => {
+                            async (err, hash) => {
                                 if (err) {
                                     console.log(err)
                                 }
                                 newUser.password = hash
+                                const qr = await generateQr(newUser._id)
+                                const file = saveQr(qr, newUser._id)
+                                // eslint-disable-next-line require-atomic-updates
+                                newUser.qrCode = `${qrPathStorage}/${file.fileName}`
                                 newUser.save()
-                                    .then(async user => {
-                                        let qr = await generateQr(user._id)
-                                        console.log(qr)
+                                    .then(user => {
                                         res.json({
                                             user,
                                             message: 'ok'

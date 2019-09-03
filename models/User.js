@@ -42,6 +42,10 @@ const userSchema = new Schema({
         enum: ['Admin', 'Team', 'Seller', 'Assistant'],
         required: true
     },
+    qrCode: {
+        type: String,
+        required: false
+    },
     deletedAt: {
         type: Date,
         required: false

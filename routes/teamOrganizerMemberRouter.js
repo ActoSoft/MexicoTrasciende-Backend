@@ -31,7 +31,8 @@ router.get('/:id', (req, res) => {
 })
 
 router.post('/',
-    passport.authenticate('jwt', { session: false }),(req, res) => {
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
         saveImage(req, res, req.body)
             .then(result => {
                 teamOrganizerMemberController.create(result)

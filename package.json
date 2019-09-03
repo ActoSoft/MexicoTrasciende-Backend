@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ActoSoft/MexicoTrasciende-Backend#readme",
   "dependencies": {
+    "base64-to-image": "^1.0.2",
     "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
