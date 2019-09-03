@@ -14,49 +14,38 @@ const saveQr = require('../utils/saveQR')
 const qrPathStorage = '/public/qrs'
 
 router.post('/register',
-    passport.authenticate('jwt', { session: false }),
-    (req, res) => {
+    passport.authenticate('jwt', { session: false }), (req, res) => {
         User.findOne({ email: req.body.email })
             .then(user => {
-                if(user) {
-                    return res.status(400).json({
-                        message: 'El email ya está utilizado'
-                    })
-                } else {
+                if(user) return res.status(400).json({
+                    message: 'El email ya está utilizado'
+                })
+                else {
                     const newUser = new User(req.body)
                     bcrypt.genSalt(10, (err, salt) => {
                         if (err) throw err
                         if (!newUser.password)
-                            res
-                                .status(400)
-                                .json({
-                                    'message':
-                                    'Not password'
+                            res.status(400).json({
+                                'message':
+                                'Not password'
+                            })
+                        bcrypt.hash(newUser.password, salt, async (err, hash) => {
+                            if (err) console.log(err)
+                            newUser.password = hash
+                            const qr = await generateQr(newUser._id)
+                            const file = saveQr(qr, newUser._id)
+                            // eslint-disable-next-line require-atomic-updates
+                            newUser.qrCode = `${qrPathStorage}/${file.fileName}`
+                            newUser.save()
+                                .then(user => {
+                                    res.json({
+                                        user, message: 'ok'
+                                    })
                                 })
-                        bcrypt.hash(newUser.password,
-                            salt,
-                            async (err, hash) => {
-                                if (err) {
-                                    console.log(err)
-                                }
-                                newUser.password = hash
-                                const qr = await generateQr(newUser._id)
-                                const file = saveQr(qr, newUser._id)
-                                // eslint-disable-next-line require-atomic-updates
-                                newUser.qrCode = `${qrPathStorage}/${file.fileName}`
-                                newUser.save()
-                                    .then(user => {
-                                        res.json({
-                                            user,
-                                            message: 'ok'
-                                        })
-                                    })
-                                    .catch(err => {
-                                        res.status(400)
-                                            .json(err)
-                                    })
-                            }
-                        )
+                                .catch(err => {
+                                    res.status(400).json(err)
+                                })
+                        })
                     })
                 }
             })
@@ -72,20 +61,14 @@ router.post('/login', (req, res) => {
                         message: 'Usuario no existe'
                     })
             }
-            bcrypt.compare(
-                password,
-                user.password
-            ).then(isMatch => {
-                if(isMatch) {
-                    const payload = {
-                        id: user._id,
-                        username: user.username
-                    }
-                    jwt.sign(
-                        payload,
-                        secret,
-                        { expiresIn: 36000 },
-                        (err, token) => {
+            bcrypt.compare(password, user.password)
+                .then(isMatch => {
+                    if(isMatch) {
+                        const payload = {
+                            id: user._id,
+                            username: user.username
+                        }
+                        jwt.sign(payload, secret, { expiresIn: 36000 }, (err, token) => {
                             if (err) res.status(500)
                             res.json({
                                 message: 'ok',
@@ -93,15 +76,15 @@ router.post('/login', (req, res) => {
                                 user
                             })
                         }
-                    )
-                }
-                else {
-                    res.status(400)
-                        .json({
-                            message: 'Claves inválidas de acceso'
-                        })
-                }
-            })
+                        )
+                    }
+                    else {
+                        res.status(400)
+                            .json({
+                                message: 'Claves inválidas de acceso'
+                            })
+                    }
+                })
         })
 })
 
