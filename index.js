@@ -1,13 +1,16 @@
 const express = require('express')
 const app = express()
 const http = require('http')
+const passport = require('passport')
 const mongoose = require('mongoose')
 const teamOrganizerMemberRouter = require('./routes/teamOrganizerMemberRouter')
 const speakerRouter = require('./routes/speakerRouter')
 const sponsorRouter = require('./routes/sponsorRouter')
+const authRouter = require('./routes/authRoutes')
 require('dotenv').config()
 const upload = require('./utils/fileUpload')
 const path = require('path')
+require('./utils/passportConfig')(passport)
 
 // Connection to mongoDB database
 const {
@@ -32,7 +35,9 @@ mongoose.connect(`mongodb://${DB_USER}:${DB_PWD}@${DB_HOST}:${DB_PORT}/${DB_NAME
 mongoose.set('useFindAndModify', false)
 app.use(express.json())
 app.use(express.urlencoded({ extended:true }))
+app.use(passport.initialize())
 app.use(upload)
+app.use('/', authRouter)
 app.use('/public', express.static(path.join(__dirname, './public')))
 app.use('/members', teamOrganizerMemberRouter)
 app.use('/speakers', speakerRouter)

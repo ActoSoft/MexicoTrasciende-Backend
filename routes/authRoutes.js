@@ -8,7 +8,7 @@ require('dotenv').config()
 const secret = process.env.JWT_SECRET || 'defaultSecret'
 
 router.post('/register',
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         User.findOne({ email: req.body.email })
             .then(user => {
@@ -20,10 +20,19 @@ router.post('/register',
                     const newUser = new User(req.body)
                     bcrypt.genSalt(10, (err, salt) => {
                         if (err) throw err
+                        if (!newUser.password)
+                            res
+                                .status(400)
+                                .json({
+                                    'message':
+                                    'Not password'
+                                })
                         bcrypt.hash(newUser.password,
                             salt,
                             (err, hash) => {
-                                if (err) throw err
+                                if (err) {
+                                    console.log(err)
+                                }
                                 newUser.password = hash
                                 newUser.save()
                                     .then(user => {
