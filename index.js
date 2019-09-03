@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const http = require('http')
-const passport = require('passport')
 const mongoose = require('mongoose')
 const teamOrganizerMemberRouter = require('./routes/teamOrganizerMemberRouter')
 const speakerRouter = require('./routes/speakerRouter')
