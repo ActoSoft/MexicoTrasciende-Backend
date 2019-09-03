@@ -7,7 +7,6 @@ const teamOrganizerMemberRouter = require('./routes/teamOrganizerMemberRouter')
 const speakerRouter = require('./routes/speakerRouter')
 const sponsorRouter = require('./routes/sponsorRouter')
 require('dotenv').config()
-require('./utils/passportConfig')(passport)
 const upload = require('./utils/fileUpload')
 const path = require('path')
 
