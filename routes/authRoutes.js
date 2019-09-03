@@ -8,7 +8,7 @@ require('dotenv').config()
 const secret = process.env.JWT_SECRET || 'defaultSecret'
 
 router.post('/register',
-    // passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     (req, res) => {
         User.findOne({ email: req.body.email })
             .then(user => {
