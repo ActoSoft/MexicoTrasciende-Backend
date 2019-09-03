@@ -39,7 +39,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
-        enum: ['Admin', 'Team', 'Seller', 'Assitant'],
+        enum: ['Admin', 'Team', 'Seller', 'Assistant'],
         required: true
     },
     deletedAt: {

@@ -9,6 +9,7 @@ const secret = process.env.JWT_SECRET || 'defaultSecret'
 const emailConfig = require('../utils/emailConfig')
 const hbs = require('nodemailer-express-handlebars')
 const gmailTransport = emailConfig.GmailTransport
+const generateQr = require('../utils/generateQR')
 
 router.post('/register',
     passport.authenticate('jwt', { session: false }),
@@ -38,7 +39,9 @@ router.post('/register',
                                 }
                                 newUser.password = hash
                                 newUser.save()
-                                    .then(user => {
+                                    .then(async user => {
+                                        let qr = await generateQr(user._id)
+                                        console.log(qr)
                                         res.json({
                                             user,
                                             message: 'ok'
