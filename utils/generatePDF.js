@@ -1,18 +1,35 @@
-const pdf = require('html-pdf')
+const Promise = require('bluebird')
+const pdf = Promise.promisifyAll(require('html-pdf'))
 const fs = require('fs')
 const ejs = require('ejs')
-const ejsFile = fs.readFileSync('../views/ticket.ejs', 'utf8')
-const options = { height: '1080px', width: '1920px' }
+const path = require('path')
+const ejsFile = fs.readFileSync(path.join(__dirname, '../views/ticket.ejs'), 'utf8')
+const moveFile = require('./moveFile')
+
 const generatePDF = (qrPath, folio = '') => {
+
+    const options = { height: '1080px',
+        width: '1920px',
+        filename: `ticket-${folio}.pdf`,
+        directory: './public/'
+    }
     const context = {
         qrPath,
         folio
     }
     const html = ejs.render(ejsFile, context)
-    pdf.create(html, options).toFile('./digital-ticket.pdf', (err, res) => {
-        if(err) return console.log(err)
-        console.log(res)
-    })
+    return pdf.createAsync(html, options)
+        .then(pdf => {
+            moveFile(pdf.filename)
+            const arr = pdf.filename.split('/')
+            return `public/tickets/${arr[arr.length - 1]}`
+        })
+        .catch(error => {
+            return {
+                hasError: true,
+                error
+            }
+        })
 }
 
-generatePDF('http://localhost:3001/public/qrs/qr-5d6deae61ab34225a0c5cccc-1567484647091.png')
+module.exports = generatePDF

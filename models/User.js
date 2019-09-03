@@ -49,6 +49,14 @@ const userSchema = new Schema({
     deletedAt: {
         type: Date,
         required: false
+    },
+    folio: {
+        type: Number,
+        required: false
+    },
+    pdfPath: {
+        type: String,
+        required: false
     }
 })
 

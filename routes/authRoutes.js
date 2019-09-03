@@ -11,10 +11,14 @@ const hbs = require('nodemailer-express-handlebars')
 const gmailTransport = emailConfig.GmailTransport
 const generateQr = require('../utils/generateQR')
 const saveQr = require('../utils/saveQR')
-const qrPathStorage = '/public/qrs'
+const API_URL = process.env.API_URL || 'http://localhost:3001'
+const qrPathStorage = `${API_URL}/public/qrs`
+const generatePDF = require('../utils/generatePDF')
+const authController = require('../controllers/AuthController')
 
 router.post('/register',
-    passport.authenticate('jwt', { session: false }), (req, res) => {
+    // passport.authenticate('jwt', { session: false }),
+    (req, res) => {
         User.findOne({ email: req.body.email })
             .then(user => {
                 if(user) return res.status(400).json({
@@ -34,13 +38,27 @@ router.post('/register',
                             newUser.password = hash
                             const qr = await generateQr(newUser._id)
                             const file = saveQr(qr, newUser._id)
+                            const qrCode = `${qrPathStorage}/${file.fileName}`
                             // eslint-disable-next-line require-atomic-updates
-                            newUser.qrCode = `${qrPathStorage}/${file.fileName}`
+                            newUser.qrCode = qrCode
                             newUser.save()
-                                .then(user => {
-                                    res.json({
-                                        user, message: 'ok'
+                                .then(async user => {
+                                    const actualFolio = await authController.getFolio()
+                                    const folio = actualFolio + 1
+                                    const pdfPath = await generatePDF(qrCode, folio)
+                                    authController.updateUser(user._id, {
+                                        folio,
+                                        pdfPath: `${API_URL}/${pdfPath}`
                                     })
+                                        .then(userUpdated => {
+                                            res.json({
+                                                user: userUpdated,
+                                                message: 'ok'
+                                            })
+                                        })
+                                        .catch(err => {
+                                            res.status(400).json(err)
+                                        })
                                 })
                                 .catch(err => {
                                     res.status(400).json(err)
