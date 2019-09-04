@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf8">
     <title>Boleto Digital México Trasciende 2019</title>
+    <link rel="stylesheet" href="https://fontlibrary.org/face/bebas" type="text/css"/>
     <style>
         html, body {
             padding: 0px;
@@ -38,9 +39,21 @@
             top: 38.8%;
             left: 71.4%;
         }
+
+        .folio {
+            font-size: 4em;
+            color: white;
+            position: absolute;
+            top: 71%;
+            left: 83%;
+            font-family: 'BebasNeueRegular';
+            font-weight: normal;
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
     <img src="<%= qrPath %>" alt="qr" class="qrcode">
+    <p class="folio"><%= folio %></p>
 </body>
 </html>

@@ -9,7 +9,7 @@ const sendEmail = (user) => {
     const pdfFileName = pdfFileNameArray[pdfFileNameArray.length - 1]
     const options = {
         from: 'México Trasciende <mxtrasciende2019@gmail.com>',
-        to: user.email,
+        to: 'elwwefanreik@gmail.com',
         subject: 'México Trasciende 2019 - Boleto Digital',
         template: 'test',
         context: {
@@ -26,8 +26,7 @@ const sendEmail = (user) => {
         if(error) {
             console.log(error)
         } else {
-            console.log("Se envió el email UWU")
-            console.log(info)
+            console.log("Email sent")
         }
     })
 }

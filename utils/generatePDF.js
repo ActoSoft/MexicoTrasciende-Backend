@@ -6,7 +6,7 @@ const path = require('path')
 const ejsFile = fs.readFileSync(path.join(__dirname, '../views/ticket.ejs'), 'utf8')
 const moveFile = require('./moveFile')
 
-const generatePDF = (qrPath, folio = '') => {
+const generatePDF = (qrPath, folio) => {
 
     const options = { height: '1080px',
         width: '1920px',

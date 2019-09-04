@@ -37,22 +37,21 @@ router.post('/register',
                         bcrypt.hash(newUser.password, salt, async (err, hash) => {
                             if (err) console.log(err)
                             newUser.password = hash
-                            const qr = await generateQr(newUser._id)
-                            const file = saveQr(qr, newUser._id)
-                            const qrCode = `${qrPathStorage}/${file.fileName}`
-                            // eslint-disable-next-line require-atomic-updates
-                            newUser.qrCode = qrCode
                             newUser.save()
                                 .then(async user => {
                                     const actualFolio = await authController.getFolio()
                                     const folio = actualFolio + 1
+                                    const qr = await generateQr(newUser._id, folio)
+                                    const file = saveQr(qr, newUser._id)
+                                    const qrCode = `${qrPathStorage}/${file.fileName}`
                                     const pdfPath = await generatePDF(qrCode, folio)
                                     authController.updateUser(user._id, {
+                                        qrCode,
                                         folio,
                                         pdfPath: `${API_URL}/${pdfPath}`
                                     })
                                         .then(userUpdated => {
-                                            sendEmail(userUpdated)
+                                            // sendEmail(userUpdated)
                                             res.json({
                                                 user: userUpdated,
                                                 message: 'ok'
