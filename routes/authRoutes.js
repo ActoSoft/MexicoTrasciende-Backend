@@ -18,7 +18,7 @@ const authController = require('../controllers/AuthController')
 const sendEmail = require('../utils/sendEmail')
 
 router.post('/register',
-    // passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     (req, res) => {
         User.findOne({ email: req.body.email })
             .then(user => {
@@ -40,27 +40,35 @@ router.post('/register',
                             newUser.password = hash
                             newUser.save()
                                 .then(async user => {
-                                    const actualFolio = await authController.getFolio()
-                                    const folio = actualFolio + 1
-                                    const qr = await generateQr(newUser._id, folio)
-                                    const file = saveQr(qr, newUser._id)
-                                    const qrCode = `${qrPathStorage}/${file.fileName}`
-                                    const pdfPath = await generatePDF(qrCode, folio)
-                                    authController.updateUser(user._id, {
-                                        qrCode,
-                                        folio,
-                                        pdfPath: `${API_URL}/${pdfPath}`
-                                    })
-                                        .then(userUpdated => {
-                                            sendEmail(userUpdated)
-                                            res.json({
-                                                user: userUpdated,
-                                                message: 'ok'
+                                    if (user.role === 'Assistant') {
+                                        const actualFolio = await authController.getFolio()
+                                        const folio = actualFolio + 1
+                                        const qr = await generateQr(newUser._id, folio)
+                                        const file = saveQr(qr, newUser._id)
+                                        const qrCode = `${qrPathStorage}/${file.fileName}`
+                                        const pdfPath = await generatePDF(qrCode, folio)
+                                        authController.updateUser(user._id, {
+                                            qrCode,
+                                            folio,
+                                            pdfPath: `${API_URL}/${pdfPath}`
+                                        })
+                                            .then(userUpdated => {
+                                                sendEmail(userUpdated)
+                                                res.json({
+                                                    user: userUpdated,
+                                                    message: 'ok'
+                                                })
                                             })
+                                            .catch(err => {
+                                                res.status(400).json(err)
+                                            })
+                                    } else {
+                                        res.json({
+                                            user,
+                                            message: 'ok'
                                         })
-                                        .catch(err => {
-                                            res.status(400).json(err)
-                                        })
+                                    }
+                                    
                                 })
                                 .catch(err => {
                                     res.status(400).json(err)
