@@ -11,6 +11,7 @@ require('dotenv').config()
 const upload = require('./utils/fileUpload')
 const path = require('path')
 require('./utils/passportConfig')(passport)
+const cors = require('cors')
 
 // Connection to mongoDB database
 const {
@@ -38,6 +39,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended:true }))
 app.use(passport.initialize())
 app.use(upload)
+app.use(cors())
 app.use('/', authRouter)
 app.use('/members', teamOrganizerMemberRouter)
 app.use('/speakers', speakerRouter)

@@ -9,7 +9,7 @@ const sendEmail = (user) => {
     const pdfFileName = pdfFileNameArray[pdfFileNameArray.length - 1]
     const options = {
         from: 'México Trasciende <mxtrasciende2019@gmail.com>',
-        to: 'elwwefanreik@gmail.com',
+        to: user.email,
         subject: 'México Trasciende 2019 - Boleto Digital',
         template: 'test',
         context: {
