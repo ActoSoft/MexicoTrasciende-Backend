@@ -15,6 +15,7 @@ const API_URL = process.env.API_URL || 'http://localhost:3001'
 const qrPathStorage = `${API_URL}/public/qrs`
 const generatePDF = require('../utils/generatePDF')
 const authController = require('../controllers/AuthController')
+const sendEmail = require('../utils/sendEmail')
 
 router.post('/register',
     // passport.authenticate('jwt', { session: false }),
@@ -51,6 +52,7 @@ router.post('/register',
                                         pdfPath: `${API_URL}/${pdfPath}`
                                     })
                                         .then(userUpdated => {
+                                            sendEmail(userUpdated)
                                             res.json({
                                                 user: userUpdated,
                                                 message: 'ok'
