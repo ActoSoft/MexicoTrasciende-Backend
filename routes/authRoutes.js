@@ -6,9 +6,6 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport')
 require('dotenv').config()
 const secret = process.env.JWT_SECRET || 'defaultSecret'
-const emailConfig = require('../utils/emailConfig')
-const hbs = require('nodemailer-express-handlebars')
-const gmailTransport = emailConfig.GmailTransport
 const generateQr = require('../utils/generateQR')
 const saveQr = require('../utils/saveQR')
 const API_URL = process.env.API_URL || 'http://localhost:3001'
@@ -114,30 +111,6 @@ router.post('/login', (req, res) => {
                     }
                 })
         })
-})
-
-router.get('/email', (req, res) => {
-    emailConfig.ViewOption(gmailTransport, hbs)
-    const options = {
-        from: 'México Trasciende <mxtrasciende2019@gmail.com>',
-        to: 'elwwefanreik@gmail.com',
-        subject: 'Hello World!',
-        template: 'test',
-        context: {
-            name: 'Martin Melo',
-            email: 'elwwefanreik@gmail.com',
-            adsress: 'González Ortega #6'
-        }
-    }
-    gmailTransport.sendMail(options, (error, info) => {
-        if(error) {
-            console.log(error)
-            res.status(400).json(error)
-        }
-        console.log("Se envió el email UWU")
-        console.log(info)
-        res.json(info)
-    })
 })
 
 module.exports = router

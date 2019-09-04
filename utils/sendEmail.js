@@ -1,4 +1,4 @@
-const emailConfig = require('../utils/emailConfig')
+const emailConfig = require('./emailConfig')
 const hbs = require('nodemailer-express-handlebars')
 const gmailTransport = emailConfig.GmailTransport
 const path = require('path')
@@ -26,7 +26,8 @@ const sendEmail = (user) => {
         if(error) {
             console.log(error)
         } else {
-            console.log("Email sent")
+            console.log(info)
+            console.log('Email sent')
         }
     })
 }
