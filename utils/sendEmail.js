@@ -4,6 +4,7 @@ const gmailTransport = emailConfig.GmailTransport
 const path = require('path')
 
 const sendEmail = (user) => {
+    console.log('llego')
     emailConfig.ViewOption(gmailTransport, hbs)
     const pdfFileNameArray = user.pdfPath.split('/')
     const pdfFileName = pdfFileNameArray[pdfFileNameArray.length - 1]
@@ -24,6 +25,7 @@ const sendEmail = (user) => {
     }
     gmailTransport.sendMail(options, (error, info) => {
         if(error) {
+            console.log('Error en el mmail')
             console.log(error)
         } else {
             console.log(info)
