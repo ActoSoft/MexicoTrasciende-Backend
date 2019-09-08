@@ -42,7 +42,6 @@ class UserController {
     }
 
     update(id, body) {
-        console.log('llego a update')
         return User.findByIdAndUpdate(id, body, {
             fields: { password: 0 },
             new: true

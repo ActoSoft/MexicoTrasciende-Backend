@@ -39,26 +39,18 @@ router.post('/register',
                             newUser.save()
                                 .then(async user => {
                                     if (user.role === 'Assistant') {
-                                        console.log("llego")
                                         const actualFolio = await authController.getFolio()
-                                        console.log('Actual folio', actualFolio)
                                         const folio = actualFolio + 1
-                                        console.log("Folio", folio)
                                         const qr = await generateQr(newUser._id, folio)
-                                        console.log('qr', qr)
                                         const file = saveQr(qr, newUser._id)
-                                        console.log('file', file)
                                         const qrCode = `${qrPathStorage}/${file.fileName}`
-                                        console.log('qrCode', qrCode)
                                         const pdfPath = await generatePDF(qrCode, folio)
-                                        console.log('pdfPath', pdfPath)
                                         userController.update(user._id, {
                                             qrCode,
                                             folio,
                                             pdfPath: `${API_URL}/${pdfPath}`
                                         })
                                             .then(userUpdated => {
-                                                console.log(userUpdated)
                                                 sendEmail(userUpdated)
                                                 res.json({
                                                     user: userUpdated,
@@ -66,7 +58,6 @@ router.post('/register',
                                                 })
                                             })
                                             .catch(err => {
-                                                console.log('Error update')
                                                 console.log(err)
                                                 res.status(400).json(err)
                                             })
@@ -78,7 +69,6 @@ router.post('/register',
                                     }
                                 })
                                 .catch(err => {
-                                    console.log('Error create')
                                     console.log(err)
                                     res.status(400).json(err)
                                 })
