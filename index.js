@@ -12,6 +12,7 @@ const upload = require('./utils/fileUpload')
 const path = require('path')
 require('./utils/passportConfig')(passport)
 const cors = require('cors')
+const userRouter = require('./routes/userRoutes')
 
 // Connection to mongoDB database
 const {
@@ -41,6 +42,9 @@ app.use(passport.initialize())
 app.use(upload)
 app.use(cors())
 app.use('/', authRouter)
+app.use('/users',
+    passport.authenticate('jwt', { session: false }),
+    userRouter)
 app.use('/members', teamOrganizerMemberRouter)
 app.use('/speakers', speakerRouter)
 app.use('/sponsors', sponsorRouter)

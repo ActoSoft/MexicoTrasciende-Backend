@@ -28,10 +28,6 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    address: {
-        type: String,
-        required: false
-    },
     gender: {
         type: String,
         enum: ['Masculino', 'Femenino', 'Prefiero no decir'],

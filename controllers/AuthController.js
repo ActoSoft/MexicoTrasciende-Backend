@@ -1,6 +1,6 @@
 const User = require('../models/User')
 
-class UserController {
+class AuthController {
 
     getFolio() {
         return User.count()
@@ -11,23 +11,6 @@ class UserController {
                 return error
             })
     }
-
-    updateUser(id, body) {
-        return User.findByIdAndUpdate(id, body, {
-            new: true
-        })
-            .then(user => {
-                return user
-            })
-            .catch(error => {
-                return {
-                    hasError: true,
-                    error
-                }
-            })
-    }
-
-
 }
 
-module.exports = new UserController()
+module.exports = new AuthController()

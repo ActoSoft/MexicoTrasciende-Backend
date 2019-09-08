@@ -12,6 +12,7 @@ const API_URL = process.env.API_URL || 'http://localhost:3001'
 const qrPathStorage = `${API_URL}/public/qrs`
 const generatePDF = require('../utils/generatePDF')
 const authController = require('../controllers/AuthController')
+const userController = require('../controllers/UserController')
 const sendEmail = require('../utils/sendEmail')
 
 router.post('/register',
@@ -44,7 +45,7 @@ router.post('/register',
                                         const file = saveQr(qr, newUser._id)
                                         const qrCode = `${qrPathStorage}/${file.fileName}`
                                         const pdfPath = await generatePDF(qrCode, folio)
-                                        authController.updateUser(user._id, {
+                                        userController.update(user._id, {
                                             qrCode,
                                             folio,
                                             pdfPath: `${API_URL}/${pdfPath}`
@@ -65,7 +66,6 @@ router.post('/register',
                                             message: 'ok'
                                         })
                                     }
-                                    
                                 })
                                 .catch(err => {
                                     res.status(400).json(err)
