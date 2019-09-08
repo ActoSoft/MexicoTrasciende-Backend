@@ -7,18 +7,18 @@ jobs:
 
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+      # - restore_cache:
+      #     keys:
+      #       - actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
 
       - run: npm install
 
-      - save_cache:
-          name: Actosoft México Trasciende Backend Cache
-          paths:
-            - ./
-          key: actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
-          when: on_success
+      # - save_cache:
+      #     name: Actosoft México Trasciende Backend Cache
+      #     paths:
+      #       - ./
+      #     key: actosoft-mxt-backend-npm-desp-{{ checksum "package.json" }}
+          # when: on_success
 
       - run: npm run lint
 
