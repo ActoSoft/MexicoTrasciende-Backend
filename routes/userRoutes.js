@@ -29,6 +29,19 @@ router.get('/', (req, res) => {
     }
 })
 
+router.get('/:id', (req, res) => {
+    userController.findOne(req.params.id)
+        .then(result => {
+            if (result.hasError) {
+                return res.status(400).json(result.error)
+            }
+            return res.json(result)
+        })
+        .catch(error => {
+            res.status(400).json(error)
+        })
+})
+
 router.delete('/:id', (req, res) => {
     userController.delete(req.params.id)
         .then(result => {

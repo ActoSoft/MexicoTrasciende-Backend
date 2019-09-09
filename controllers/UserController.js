@@ -41,9 +41,21 @@ class UserController {
             })
     }
 
+    findOne(id) {
+        return User.findOne({ _id: id })
+            .then(user => {
+                return user
+            })
+            .catch(error => {
+                return {
+                    hasError: true,
+                    error
+                }
+            })
+    }
+
     update(id, body) {
         return User.findByIdAndUpdate(id, body, {
-            fields: { password: 0 },
             new: true
         })
             .then(user => {

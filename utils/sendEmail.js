@@ -3,7 +3,7 @@ const hbs = require('nodemailer-express-handlebars')
 const gmailTransport = emailConfig.GmailTransport
 const path = require('path')
 
-const sendEmail = (user) => {
+const sendEmail = (user, pwd) => {
     emailConfig.ViewOption(gmailTransport, hbs)
     const pdfFileNameArray = user.pdfPath.split('/')
     const pdfFileName = pdfFileNameArray[pdfFileNameArray.length - 1]
@@ -14,7 +14,8 @@ const sendEmail = (user) => {
         template: 'test',
         context: {
             name: user.name,
-            email: user.email
+            email: user.email,
+            password: pwd
         },
         attachments: [
             {

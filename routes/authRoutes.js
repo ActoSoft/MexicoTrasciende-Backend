@@ -25,7 +25,7 @@ router.post('/register',
                 })
                 else {
                     const newUser = new User(req.body)
-                    console.log(newUser)
+                    const realPassword = newUser.password
                     bcrypt.genSalt(10, (err, salt) => {
                         if (err) throw err
                         if (!newUser.password)
@@ -51,7 +51,7 @@ router.post('/register',
                                             pdfPath: `${API_URL}/${pdfPath}`
                                         })
                                             .then(userUpdated => {
-                                                sendEmail(userUpdated)
+                                                sendEmail(userUpdated, realPassword)
                                                 res.json({
                                                     user: userUpdated,
                                                     message: 'ok'
