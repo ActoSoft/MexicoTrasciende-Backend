@@ -53,6 +53,10 @@ const userSchema = new Schema({
     pdfPath: {
         type: String,
         required: false
+    },
+    logged: {
+        type: Boolean,
+        default: false
     }
 })
 
